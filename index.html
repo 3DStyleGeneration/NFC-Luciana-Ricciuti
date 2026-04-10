@@ -16,18 +16,26 @@
 body {
   margin:0;
   font-family: 'Playfair Display', serif;
+
   background: radial-gradient(circle at 20% 20%, rgba(212,175,55,0.15), transparent 40%),
               radial-gradient(circle at 80% 80%, rgba(212,175,55,0.1), transparent 40%),
               linear-gradient(160deg, #000000, #1a1a1a, #2a2205);
+
   color:white;
+
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  height:100vh;
-  overflow:hidden;
-  animation: fadeIn 1s ease;
+
+  min-height:100vh;   /* 🔥 FIX invece di height */
+  min-height:100dvh;  /* 🔥 FIX mobile moderno */
+
+  overflow-x:hidden;
+  overflow-y:auto;
+
   text-align:center;
+  animation: fadeIn 1s ease;
 }
 
 /* LUCE ANIMATA */
@@ -56,13 +64,15 @@ body::before {
 .card {
   position:relative;
   background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+backdrop-filter: blur(15px);
   padding:25px;
   border-radius:20px;
   width:320px;
   text-align:center;
   box-shadow:0 10px 40px rgba(0,0,0,0.7);
   z-index:2;
+  margin:20px 0;
 }
 
 /* TESTI */
@@ -81,9 +91,9 @@ body::before {
 }
 
 /* VINILE */
-vinyl {
-  background: transparent;
-  outline: none;
+.vinyl {
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 @keyframes spin {
