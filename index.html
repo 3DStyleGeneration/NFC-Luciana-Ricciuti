@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<title>Ascolta ora</title>
+
+<style>
+:root {
+  --gold: #d4af37;
+}
+
+body {
+  margin:0;
+  font-family: 'Playfair Display', serif;
+  background: radial-gradient(circle at 20% 20%, rgba(212,175,55,0.15), transparent 40%),
+              radial-gradient(circle at 80% 80%, rgba(212,175,55,0.1), transparent 40%),
+              linear-gradient(160deg, #000000, #1a1a1a, #2a2205);
+  color:white;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  overflow:hidden;
+  animation: fadeIn 1s ease;
+  text-align:center;
+}
+
+/* LUCE ANIMATA */
+body::before {
+  content:"";
+  position:absolute;
+  width:200%;
+  height:200%;
+  background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 60%);
+  animation: moveLight 12s infinite linear;
+}
+
+@keyframes moveLight {
+  0% {transform: translate(-25%, -25%);}
+  50% {transform: translate(25%, 25%);}
+  100% {transform: translate(-25%, -25%);}
+}
+
+/* APERTURA */
+@keyframes fadeIn {
+  from {opacity:0; transform:scale(0.95);}
+  to {opacity:1; transform:scale(1);}
+}
+
+/* CARD */
+.card {
+  position:relative;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(15px);
+  padding:25px;
+  border-radius:20px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,0.7);
+  z-index:2;
+}
+
+/* TESTI */
+.top-text {
+  font-size:16px;
+  margin-bottom:20px;
+  line-height:1.4;
+}
+
+.subtitle {
+  font-size:14px;
+  color:#ddd;
+  margin-top:10px;
+  margin-bottom:20px;
+  line-height:1.4;
+}
+
+/* VINILE */
+.vinyl {
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  object-fit:cover;
+  margin:0 auto 20px;
+  display:block;
+  animation: spin 4s linear infinite;
+  animation-play-state: paused;
+  box-shadow:0 0 25px rgba(212,175,55,0.4);
+}
+
+@keyframes spin {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
+
+/* PROGRESS */
+.progress-container {
+  width:100%;
+  height:6px;
+  background:#333;
+  border-radius:10px;
+  cursor:pointer;
+  margin:15px 0;
+}
+
+.progress {
+  height:100%;
+  width:0%;
+  background:var(--gold);
+  border-radius:10px;
+}
+
+/* TIME */
+.time {
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#aaa;
+}
+
+/* BOTTONI */
+.btn {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:45px;
+  margin-top:12px;
+  background:var(--gold);
+  color:black;
+  border:none;
+  border-radius:50px;
+  font-weight:600;
+  font-size:14px;
+  text-decoration:none;
+  cursor:pointer;
+  box-sizing:border-box;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+  transform: scale(1.02);
+}
+
+/* FOOTER */
+.footer {
+  margin-top:15px;
+  font-size:12px;
+  color:#aaa;
+}
+
+.footer a {
+  color:var(--gold);
+  text-decoration:none;
+  font-weight:bold;
+}
+
+/* FRASE FINALE GLOW */
+.bottom-text {
+  margin-top:25px;
+  max-width:320px;
+  font-size:14px;
+  line-height:1.5;
+  color:#fff;
+  text-shadow: 0 0 8px rgba(212,175,55,0.4),
+               0 0 15px rgba(212,175,55,0.2);
+  z-index:2;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <!-- TESTO SOPRA -->
+  <div class="top-text">
+    50 YEARS<br>
+    The Best is Yet to Play
+  </div>
+
+  <!-- VINILE -->
+  <img src="vinile.png" class="vinyl" id="vinyl">
+
+  <!-- TESTO SOTTO -->
+  <div class="subtitle">
+    Goditi il momento.<br>
+    sound selection curated by Fabio Ricciuti
+  </div>
+
+  <audio id="audio" autoplay>
+    <source src="audio.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="progress-container" onclick="setProgress(event)">
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <div class="time">
+    <span id="current">0:00</span>
+    <span id="duration">0:00</span>
+  </div>
+
+  <button class="btn" id="playBtn" onclick="togglePlay()">▶ Riproduci</button>
+  <a href="audio.mp3" download class="btn">⬇ Download</a>
+
+  <div class="footer">
+    Realizzato da 
+    <a href="https://instagram.com/TUOUSERNAME" target="_blank">3D Style</a>
+  </div>
+
+</div>
+
+<!-- FRASE FINALE -->
+<div class="bottom-text">
+  La bellezza di un traguardo sta in chi lo condivide con te. Grazie per esserci.<br>
+  Il mio disco d’oro sei tu.<br>
+  Con tutto il mio affetto, Luciana
+</div>
+
+<script>
+const audio=document.getElementById("audio");
+const progress=document.getElementById("progress");
+const current=document.getElementById("current");
+const durationEl=document.getElementById("duration");
+const vinyl=document.getElementById("vinyl");
+const playBtn=document.getElementById("playBtn");
+
+window.addEventListener("load",()=>{audio.play().catch(()=>{});});
+
+function togglePlay(){
+  if(audio.paused){
+    audio.play();
+  } else {
+    audio.pause();
+  }
+}
+
+audio.addEventListener("play",()=>{
+  vinyl.style.animationPlayState="running";
+  playBtn.textContent="⏸ Pausa";
+});
+
+audio.addEventListener("pause",()=>{
+  vinyl.style.animationPlayState="paused";
+  playBtn.textContent="▶ Riproduci";
+});
+
+audio.addEventListener("timeupdate",()=>{
+  progress.style.width=(audio.currentTime/audio.duration*100)+"%";
+  current.textContent=formatTime(audio.currentTime);
+});
+
+audio.addEventListener("loadedmetadata",()=>{
+  durationEl.textContent=formatTime(audio.duration);
+});
+
+function setProgress(e){
+  const width=e.currentTarget.clientWidth;
+  audio.currentTime=(e.offsetX/width)*audio.duration;
+}
+
+function formatTime(t){
+  let m=Math.floor(t/60), s=Math.floor(t%60);
+  if(s<10)s="0"+s;
+  return m+":"+s;
+}
+</script>
+
+</body>
+</html>
